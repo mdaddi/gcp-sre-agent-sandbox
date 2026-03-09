@@ -1,0 +1,24 @@
+# =============================================================================
+# SCENARIO: Service Selector Mismatch - Silent Networking Failure
+# =============================================================================
+# order-service Service has wrong selector label. Pods are healthy but
+# Service routes to nothing because selector doesn't match any pods.
+#
+# HOW TO BREAK: kubectl apply -f k8s/scenarios/service-mismatch.yaml
+# HOW TO FIX:   kubectl apply -f k8s/base/application.yaml
+# =============================================================================
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+  namespace: pets
+  labels:
+    scenario: service-mismatch
+    sre-demo: breakable
+spec:
+  selector:
+    app: order-service-v2
+  ports:
+    - port: 3000
+      targetPort: 3000

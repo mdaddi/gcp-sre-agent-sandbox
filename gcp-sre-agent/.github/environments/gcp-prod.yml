@@ -1,0 +1,14 @@
+name: GCP Production Environment
+description: Production GCP deployment for SRE Agent Sandbox
+reviewers:
+  - devops-team
+  - platform-leads
+deployment_branch_policy:
+  protected_branches_only: true
+environment_url: https://console.cloud.google.com/
+
+variables:
+  GCP_PROJECT_ID: your-project-id
+  GCP_REGION: us-central1
+  WORKLOAD_NAME: srelab
+  CLUSTER_NAME: srelab-gke

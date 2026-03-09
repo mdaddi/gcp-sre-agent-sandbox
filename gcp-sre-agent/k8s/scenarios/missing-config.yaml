@@ -1,0 +1,53 @@
+# =============================================================================
+# SCENARIO: ConfigMap Misconfiguration - Missing Configuration
+# =============================================================================
+# Service references a non-existent ConfigMap, preventing pod startup.
+#
+# HOW TO BREAK: kubectl apply -f k8s/scenarios/missing-config.yaml
+# HOW TO FIX:   kubectl delete deployment misconfigured-service -n pets
+# =============================================================================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: misconfigured-service
+  namespace: pets
+  labels:
+    app: misconfigured-service
+    scenario: missing-config
+    sre-demo: breakable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: misconfigured-service
+  template:
+    metadata:
+      labels:
+        app: misconfigured-service
+        scenario: missing-config
+    spec:
+      nodeSelector:
+        nodepool-type: user
+      containers:
+        - name: app
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "25m"
+            limits:
+              memory: "64Mi"
+              cpu: "50m"
+          envFrom:
+            - configMapRef:
+                name: nonexistent-configmap
+          volumeMounts:
+            - name: config-volume
+              mountPath: /etc/config
+      volumes:
+        - name: config-volume
+          configMap:
+            name: another-nonexistent-configmap

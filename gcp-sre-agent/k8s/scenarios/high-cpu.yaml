@@ -1,0 +1,51 @@
+# =============================================================================
+# SCENARIO: High CPU Utilization - Resource Exhaustion
+# =============================================================================
+# Stress test pods consume excessive CPU, affecting other workloads.
+#
+# HOW TO BREAK: kubectl apply -f k8s/scenarios/high-cpu.yaml
+# HOW TO FIX:   kubectl delete deployment cpu-stress-test -n pets
+# =============================================================================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cpu-stress-test
+  namespace: pets
+  labels:
+    app: cpu-stress-test
+    scenario: high-cpu
+    sre-demo: breakable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cpu-stress-test
+  template:
+    metadata:
+      labels:
+        app: cpu-stress-test
+        scenario: high-cpu
+    spec:
+      nodeSelector:
+        nodepool-type: user
+      containers:
+        - name: stress
+          image: alpine:latest
+          command: ["/bin/sh"]
+          args:
+            - "-c"
+            - |
+              echo "Starting CPU stress test..."
+              while true; do
+                for i in $(seq 1 10000); do
+                  echo "scale=1000; 4*a(1)" | bc -l > /dev/null 2>&1 || true
+                done
+              done
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "100m"
+            limits:
+              memory: "64Mi"
+              cpu: "2000m"

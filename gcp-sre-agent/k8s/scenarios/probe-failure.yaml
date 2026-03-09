@@ -1,0 +1,56 @@
+# =============================================================================
+# SCENARIO: Failed Liveness Probe - Health Check Failure
+# =============================================================================
+# Service with a liveness probe that always fails, causing continuous restarts.
+#
+# HOW TO BREAK: kubectl apply -f k8s/scenarios/probe-failure.yaml
+# HOW TO FIX:   kubectl delete deployment unhealthy-service -n pets
+# =============================================================================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unhealthy-service
+  namespace: pets
+  labels:
+    app: unhealthy-service
+    scenario: probe-failure
+    sre-demo: breakable
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: unhealthy-service
+  template:
+    metadata:
+      labels:
+        app: unhealthy-service
+        scenario: probe-failure
+    spec:
+      nodeSelector:
+        nodepool-type: user
+      containers:
+        - name: unhealthy-app
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "25m"
+            limits:
+              memory: "64Mi"
+              cpu: "50m"
+          livenessProbe:
+            httpGet:
+              path: /health/nonexistent
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health/nonexistent
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 3

@@ -1,0 +1,45 @@
+# =============================================================================
+# SCENARIO: ImagePullBackOff - Invalid container image
+# =============================================================================
+# makeline-service references a non-existent image tag.
+#
+# HOW TO BREAK: kubectl apply -f k8s/scenarios/image-pull-backoff.yaml
+# HOW TO FIX:   kubectl apply -f k8s/base/application.yaml
+# =============================================================================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: makeline-service
+  namespace: pets
+  labels:
+    app: makeline-service
+    scenario: image-pull-backoff
+    sre-demo: breakable
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: makeline-service
+  template:
+    metadata:
+      labels:
+        app: makeline-service
+    spec:
+      nodeSelector:
+        nodepool-type: user
+      containers:
+        - name: makeline-service
+          image: ghcr.io/azure-samples/aks-store-demo/makeline-service:nonexistent-tag-v999
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3001
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"

@@ -1,0 +1,77 @@
+---
+# Google Managed Prometheus - PodMonitoring CRDs
+# Enables automatic metrics scraping for application services
+
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: order-service
+  namespace: pets
+spec:
+  selector:
+    matchLabels:
+      app: order-service
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: product-service
+  namespace: pets
+spec:
+  selector:
+    matchLabels:
+      app: product-service
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: makeline-service
+  namespace: pets
+spec:
+  selector:
+    matchLabels:
+      app: makeline-service
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: store-front
+  namespace: pets
+spec:
+  selector:
+    matchLabels:
+      app: store-front
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics
+
+---
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: store-admin
+  namespace: pets
+spec:
+  selector:
+    matchLabels:
+      app: store-admin
+  endpoints:
+  - port: metrics
+    interval: 30s
+    path: /metrics

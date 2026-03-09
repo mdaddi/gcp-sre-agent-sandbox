@@ -1,0 +1,49 @@
+# =============================================================================
+# SCENARIO: CrashLoopBackOff - Application startup failure
+# =============================================================================
+# product-service fails on startup, entering CrashLoopBackOff state.
+#
+# HOW TO BREAK: kubectl apply -f k8s/scenarios/crash-loop.yaml
+# HOW TO FIX:   kubectl apply -f k8s/base/application.yaml
+# =============================================================================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+  namespace: pets
+  labels:
+    app: product-service
+    scenario: crash-loop
+    sre-demo: breakable
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      nodeSelector:
+        nodepool-type: user
+      containers:
+        - name: product-service
+          image: ghcr.io/azure-samples/aks-store-demo/product-service:latest
+          ports:
+            - containerPort: 3002
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+          env:
+            - name: AI_SERVICE_URL
+              value: "http://nonexistent-service:9999/"
+          command: ["/bin/sh"]
+          args: ["-c", "echo 'Starting with invalid config...'; exit 1"]

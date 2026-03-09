@@ -1,0 +1,28 @@
+# GCP Project Configuration
+gcp_project_id = "my-gcp-project-123"
+gcp_region     = "us-central1"  # Options: us-central1, us-east1, europe-west1
+
+# Workload Naming
+workload_name = "srelab"
+
+# Kubernetes Version
+kubernetes_version = "1.32"
+
+# Secrets (REPLACE WITH ACTUAL VALUES)
+mongodb_password = "secure-mongodb-password-here"
+rabbitmq_password = "secure-rabbitmq-password-here"
+
+# Developer Email (for artifact registry push permissions)
+developer_email = "your-email@company.com"
+
+# Webhook URL (for alerts - optional)
+webhook_url = ""  # Leave empty to use Pub/Sub only
+
+# Optional Settings
+enable_monitoring = true
+enable_grafana    = true
+
+# Environment Tags
+environment      = "sandbox"
+cost_center      = "engineering"
+owner_team       = "platform"

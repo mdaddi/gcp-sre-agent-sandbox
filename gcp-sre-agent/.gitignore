@@ -1,0 +1,119 @@
+# =============================================================================
+# GCP SRE Agent Sandbox - Git Ignore
+# =============================================================================
+
+# GCP credentials (NEVER commit)
+.gcloud/
+*.json
+!package.json
+!devcontainer.json
+!devcontainer-gcp.json
+!launch.json
+!tasks.json
+!settings.json
+!extensions.json
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+*.tfvars
+!*.tfvars.example
+.terraform.lock.hcl
+
+# Kubernetes
+kubeconfig
+kubeconfig.yaml
+*.kubeconfig
+
+# Helm
+**/charts/*.tgz
+**/.helmignore
+
+# Kubernetes secrets (NEVER commit)
+**/secrets.yaml
+**/secret.yaml
+**/*-secret.yaml
+**/*-secrets.yaml
+
+# Secrets & Credentials
+.env
+.env.*
+*.env
+!.env.example
+!.env.template
+*.pem
+*.key
+*.pfx
+*.p12
+id_rsa
+id_ed25519
+*.crt
+*.cer
+
+# IDE & Editor
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+.history/
+*.vsix
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS Generated
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Build & Output
+bin/
+obj/
+out/
+dist/
+build/
+target/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Package Managers
+node_modules/
+package-lock.json
+yarn.lock
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+vendor/
+
+# Testing
+coverage/
+*.cover
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Temporary Files
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.cache
+.cache/

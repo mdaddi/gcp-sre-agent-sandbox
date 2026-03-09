@@ -1,0 +1,57 @@
+{
+  "name": "GCP SRE Agent Sandbox",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+  "features": {
+    "ghcr.io/devcontainers/features/gcloud:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/terraform:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/kubectl:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/helm:1": {
+      "version": "latest"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "hashicorp.terraform",
+        "GoogleCloudTools.cloudcode",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "ms-vscode.makefile-tools",
+        "redhat.vscode-yaml",
+        "GitHub.copilot",
+        "GitHub.copilot-chat"
+      ]
+    }
+  },
+  "containerEnv": {
+    "GCLOUD_USE_DEVICE_CODE": "true"
+  },
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "forwardPorts": [8080, 3000, 3001, 3002],
+  "portsAttributes": {
+    "8080": {
+      "label": "Store Frontend",
+      "onAutoForward": "notify"
+    },
+    "3000": {
+      "label": "Order Service",
+      "onAutoForward": "notify"
+    },
+    "3001": {
+      "label": "Makeline Service",
+      "onAutoForward": "notify"
+    },
+    "3002": {
+      "label": "Product Service",
+      "onAutoForward": "notify"
+    }
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.config/gcloud,target=/root/.config/gcloud,type=bind"
+  ]
+}
