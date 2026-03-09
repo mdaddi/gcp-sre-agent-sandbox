@@ -3,145 +3,153 @@
 ## Level 1: System Context Diagram
 
 ```mermaid
-flowchart TB
-    sre["SRE Engineer\n\nDiagnoses and remediates\napplication issues"]
-    dev["Developer\n\nDeploys infrastructure\nand applications"]
+C4Context
+    title System Context - GCP SRE Agent Sandbox
 
-    srelab(["GCP SRE Agent Sandbox\n\nGKE-based e-commerce demo\nwith breakable scenarios\nfor SRE training"])
+    Person(sre, "SRE Engineer", "Diagnoses and remediates<br/>application issues")
+    Person(dev, "Developer", "Deploys infrastructure<br/>and applications")
 
-    gemini[/"Gemini in Cloud Logging\n\nAI-powered log analysis\nand diagnosis"/]
-    ghcr[/"GitHub Container Registry\n\nghcr.io/gcp-sre-agent/\nstore-demo images"/]
-    gcp_iam[/"Google Cloud IAM\n\nIdentity and access\nmanagement"/]
+    System(srelab, "GCP SRE Agent Sandbox", "GKE-based e-commerce demo<br/>with breakable scenarios<br/>for SRE training")
 
-    sre -- "Diagnoses failures,\napplies scenarios\n(kubectl, gcloud)" --> srelab
-    dev -- "Deploys & manages\ninfrastructure\n(Terraform, bash scripts)" --> srelab
-    sre -- "Queries logs with\nnatural language" --> gemini
-    srelab -- "Pulls container images" --> ghcr
-    srelab -- "Authenticates via\nWorkload Identity" --> gcp_iam
+    System_Ext(gemini, "Gemini in Cloud Logging", "AI-powered log analysis<br/>and diagnosis")
+    System_Ext(ghcr, "GitHub Container Registry", "ghcr.io/gcp-sre-agent/<br/>store-demo images")
+    System_Ext(gcp_iam, "Google Cloud IAM", "Identity and access<br/>management")
+
+    Rel(sre, srelab, "Diagnoses failures,<br/>applies scenarios", "kubectl, gcloud")
+    Rel(dev, srelab, "Deploys & manages<br/>infrastructure", "Terraform, bash scripts")
+    Rel(sre, gemini, "Queries logs with<br/>natural language")
+    Rel(srelab, ghcr, "Pulls container images")
+    Rel(srelab, gcp_iam, "Authenticates via<br/>Workload Identity")
 ```
 
 ## Level 2: Container Diagram
 
 ```mermaid
-flowchart TB
-    sre["SRE Engineer"]
-    dev["Developer"]
+C4Container
+    title Container Diagram - GCP SRE Agent Sandbox
 
-    subgraph gcp ["Google Cloud Platform"]
+    Person(sre, "SRE Engineer")
+    Person(dev, "Developer")
 
-        subgraph gke ["GKE Cluster (srelab-gke)"]
+    System_Boundary(gcp, "Google Cloud Platform") {
 
-            subgraph cloudops_ns ["Namespace: cloudops"]
-                storefront["store-front\nVue.js\n:8080"]
-                storeadmin["store-admin\nVue.js\n:8081"]
-                orderservice["order-service\nNode.js\n:3000"]
-                productservice["product-service\nRust\n:3002"]
-                makelineservice["makeline-service\nGo\n:3001"]
-                virtualcustomer["virtual-customer\nLoad Gen"]
-                mongodb[("MongoDB 4.4\nOrder database\nPD: standard-rwo")]
-                rabbitmq["RabbitMQ 3.11\nMessage queue\nAMQP :5672"]
-                grafana["Grafana 10.0\nDashboards :3000\nLB :80"]
-            end
+        System_Boundary(gke, "GKE Cluster (srelab-gke)") {
 
-            gmp["GMP PodMonitoring\nCRDs\nMetrics scraping 30s"]
-        end
+            System_Boundary(cloudops_ns, "Namespace: cloudops") {
+                Container(storefront, "store-front", "Vue.js", "Customer-facing<br/>web UI :8080")
+                Container(storeadmin, "store-admin", "Vue.js", "Admin panel :8081")
+                Container(orderservice, "order-service", "Node.js", "Order processing :3000")
+                Container(productservice, "product-service", "Rust", "Product catalog :3002")
+                Container(makelineservice, "makeline-service", "Go", "Order fulfillment :3001")
+                Container(virtualcustomer, "virtual-customer", "Load Gen", "Simulates traffic")
+                ContainerDb(mongodb, "MongoDB", "MongoDB 4.4", "Order database<br/>PD: standard-rwo")
+                Container(rabbitmq, "RabbitMQ", "RabbitMQ 3.11", "Message queue<br/>AMQP :5672")
+                Container(grafana, "Grafana", "Grafana 10.0", "Dashboards :3000<br/>LB :80")
+            }
 
-        subgraph infra ["GCP Managed Services"]
-            secretmgr[("Secret Manager\nmongodb-password\nrabbitmq-password")]
-            cloudlogging["Cloud Logging\nk8s_container &\nk8s_pod logs"]
-            bigquery[("BigQuery\nLog sink dataset\n90-day retention")]
-            cloudmon["Cloud Monitoring\nAlert policies\n& dashboards"]
-            artifactreg["Artifact Registry\nDocker repo:\nsrelab-docker"]
-            pubsub["Pub/Sub\nAlert notifications"]
-        end
+            Container(gmp, "GMP PodMonitoring", "CRDs", "Metrics scraping<br/>30s interval")
+        }
 
-        subgraph network ["VPC: srelab-network"]
-            subnet_pods["Subnet: pods\n10.0.0.0/22"]
-            subnet_svc["Subnet: services\n10.0.4.0/24"]
-            nat["Cloud NAT\nOutbound internet"]
-        end
-    end
+        System_Boundary(infra, "GCP Managed Services") {
+            ContainerDb(secretmgr, "Secret Manager", "GCP", "mongodb-password<br/>rabbitmq-password")
+            Container(cloudlogging, "Cloud Logging", "GCP", "k8s_container &<br/>k8s_pod logs")
+            ContainerDb(bigquery, "BigQuery", "GCP", "Log sink dataset<br/>90-day retention")
+            Container(cloudmon, "Cloud Monitoring", "GCP", "Alert policies<br/>& dashboards")
+            Container(artifactreg, "Artifact Registry", "GCP", "Docker repo:<br/>srelab-docker")
+            Container(pubsub, "Pub/Sub", "GCP", "Alert notifications")
+        }
 
-    sre -- "Browses store\nHTTP :80 LB" --> storefront
-    sre -- "Views dashboards\nHTTP :80 LB" --> grafana
-    dev -- "Manages cluster\nkubectl, terraform" --> gke
-    storefront -- "Places orders\nHTTP" --> orderservice
-    storefront -- "Lists products\nHTTP" --> productservice
-    storeadmin -- "Manages products\nHTTP" --> productservice
-    storeadmin -- "Views orders\nHTTP" --> makelineservice
-    orderservice -- "Publishes orders\nAMQP :5672" --> rabbitmq
-    makelineservice -- "Consumes orders\nAMQP :5672" --> rabbitmq
-    makelineservice -- "Stores orders\nTCP :27017" --> mongodb
-    virtualcustomer -- "Generates load\nHTTP" --> orderservice
-    cloudlogging -- "Sinks logs\nLog Router" --> bigquery
-    cloudmon -- "Fires alerts\nNotification Channel" --> pubsub
-    grafana -- "Queries metrics\nStackdriver API" --> cloudmon
-    gmp -- "Exports metrics\nGMP pipeline" --> cloudmon
+        System_Boundary(network, "VPC: srelab-network") {
+            Container(subnet_pods, "Subnet: pods", "10.0.0.0/22", "Pod networking")
+            Container(subnet_svc, "Subnet: services", "10.0.4.0/24", "Service networking")
+            Container(nat, "Cloud NAT", "Router", "Outbound internet")
+        }
+    }
+
+    Rel(sre, storefront, "Browses store", "HTTP :80 LB")
+    Rel(sre, grafana, "Views dashboards", "HTTP :80 LB")
+    Rel(dev, gke, "Manages cluster", "kubectl, terraform")
+    Rel(storefront, orderservice, "Places orders", "HTTP")
+    Rel(storefront, productservice, "Lists products", "HTTP")
+    Rel(storeadmin, productservice, "Manages products", "HTTP")
+    Rel(storeadmin, makelineservice, "Views orders", "HTTP")
+    Rel(orderservice, rabbitmq, "Publishes orders", "AMQP :5672")
+    Rel(makelineservice, rabbitmq, "Consumes orders", "AMQP :5672")
+    Rel(makelineservice, mongodb, "Stores orders", "TCP :27017")
+    Rel(virtualcustomer, orderservice, "Generates load", "HTTP")
+    Rel(cloudlogging, bigquery, "Sinks logs", "Log Router")
+    Rel(cloudmon, pubsub, "Fires alerts", "Notification Channel")
+    Rel(grafana, cloudmon, "Queries metrics", "Stackdriver API")
+    Rel(gmp, cloudmon, "Exports metrics", "GMP pipeline")
 ```
 
 ## Level 3: Component Diagram (Infrastructure as Code)
 
 ```mermaid
-flowchart TB
-    dev["Developer"]
+C4Component
+    title Component Diagram - Terraform Modules
 
-    subgraph terraform ["infra/terraform/"]
+    Person(dev, "Developer")
 
-        main["main.tf\nRoot Module\nOrchestrates all modules,\nconfigures providers"]
-        variables["variables.tf\nVariables\ngcp_project_id, gcp_region,\nworkload_name, passwords"]
-        outputs["outputs.tf\nOutputs\ncluster_endpoint, registry_url,\ndashboard_ids"]
+    System_Boundary(terraform, "infra/terraform/") {
 
-        subgraph modules ["modules/"]
-            mod_vpc["vpc/\nNetwork Module\nVPC, subnets, firewall,\nCloud NAT, router"]
-            mod_gke["gke/\nGKE Module\nCluster, node pools,\nStorageClasses (CSI)"]
-            mod_ar["artifact-registry/\nRegistry Module\nDocker repo,\nIAM reader/writer"]
-            mod_sm["secret-manager/\nSecrets Module\nSecrets + versions,\naccessor bindings"]
-            mod_log["logging/\nLogging Module\nBigQuery dataset,\nlog sink, exclusions"]
-            mod_mon["monitoring/\nMonitoring Module\nDashboard, alerts,\nPub/Sub, webhook"]
-            mod_iam["iam/\nIAM Module\nService accounts,\nWorkload Identity bindings"]
-        end
-    end
+        Component(main, "main.tf", "Root Module", "Orchestrates all modules,<br/>configures providers")
+        Component(variables, "variables.tf", "Variables", "gcp_project_id, gcp_region,<br/>workload_name, passwords")
+        Component(outputs, "outputs.tf", "Outputs", "cluster_endpoint, registry_url,<br/>dashboard_ids")
 
-    dev -- "terraform apply\nCLI" --> main
-    main -- "network_name, CIDRs, region" --> mod_vpc
-    main -- "project_id, cluster_name,\nvpc outputs, k8s version" --> mod_gke
-    main -- "project_id, region,\ngke SA email" --> mod_ar
-    main -- "project_id, secrets map,\ngke SA email" --> mod_sm
-    main -- "project_id, region,\nsink_name, dataset" --> mod_log
-    main -- "project_id, region,\ncluster_name, webhook_url" --> mod_mon
-    main -- "project_id, cluster_name,\nWI pool, SA configs" --> mod_iam
-    mod_gke -. "depends_on\nnetwork_name, subnet_name" .-> mod_vpc
-    mod_iam -. "depends_on\ncluster outputs" .-> mod_gke
-    mod_iam -. "depends_on\nsecret access" .-> mod_sm
+        System_Boundary(modules, "modules/") {
+            Component(mod_vpc, "vpc/", "Network Module", "VPC, subnets, firewall,<br/>Cloud NAT, router")
+            Component(mod_gke, "gke/", "GKE Module", "Cluster, node pools,<br/>StorageClasses (CSI)")
+            Component(mod_ar, "artifact-registry/", "Registry Module", "Docker repo,<br/>IAM reader/writer")
+            Component(mod_sm, "secret-manager/", "Secrets Module", "Secrets + versions,<br/>accessor bindings")
+            Component(mod_log, "logging/", "Logging Module", "BigQuery dataset,<br/>log sink, exclusions")
+            Component(mod_mon, "monitoring/", "Monitoring Module", "Dashboard, alerts,<br/>Pub/Sub, webhook")
+            Component(mod_iam, "iam/", "IAM Module", "Service accounts,<br/>Workload Identity bindings")
+        }
+    }
+
+    Rel(dev, main, "terraform apply", "CLI")
+    Rel(main, mod_vpc, "network_name, CIDRs, region")
+    Rel(main, mod_gke, "project_id, cluster_name,<br/>vpc outputs, k8s version")
+    Rel(main, mod_ar, "project_id, region,<br/>gke SA email")
+    Rel(main, mod_sm, "project_id, secrets map,<br/>gke SA email")
+    Rel(main, mod_log, "project_id, region,<br/>sink_name, dataset")
+    Rel(main, mod_mon, "project_id, region,<br/>cluster_name, webhook_url")
+    Rel(main, mod_iam, "project_id, cluster_name,<br/>WI pool, SA configs")
+    Rel(mod_gke, mod_vpc, "depends_on", "network_name,<br/>subnet_name")
+    Rel(mod_iam, mod_gke, "depends_on", "cluster outputs")
+    Rel(mod_iam, mod_sm, "depends_on", "secret access")
 ```
 
 ## Level 4: Deployment Diagram
 
 ```mermaid
-flowchart TB
-    subgraph gcp ["Google Cloud Platform (us-central1)"]
+C4Deployment
+    title Deployment Diagram - GKE Node Pools
 
-        subgraph gke ["GKE Cluster: srelab-gke\nKubernetes 1.32, VPC-native"]
+    Deployment_Node(gcp, "Google Cloud Platform", "us-central1") {
 
-            subgraph system_pool ["System Node Pool\n2x n2-standard-2, 50GB pd-standard"]
-                kube_system["kube-system\nCoreDNS, kube-proxy,\nCalico, GMP collector"]
-            end
+        Deployment_Node(gke, "GKE Cluster: srelab-gke", "Kubernetes 1.32, VPC-native") {
 
-            subgraph user_pool ["User Node Pool\n3x n2-standard-2, 100GB pd-standard"]
-                app_pods["Application Pods (cloudops ns)\nstore-front (2), store-admin (1)\norder-service (2), product-service (2)\nmakeline-service (2), virtual-customer (1)"]
-                data_pods["Data Pods (cloudops ns)\nmongodb (1) + PVC 8Gi\nrabbitmq (1)"]
-                obs_pods["Observability Pods (cloudops ns)\ngrafana (1)"]
-            end
-        end
+            Deployment_Node(system_pool, "System Node Pool", "2x n2-standard-2, 50GB pd-standard") {
+                Container(kube_system, "kube-system", "K8s", "CoreDNS, kube-proxy,<br/>Calico, GMP collector")
+            }
 
-        subgraph managed ["GCP Managed Services"]
-            svc_mon["Cloud Monitoring\n2 alert policies, 1 dashboard"]
-            svc_log["Cloud Logging\nLog sink to BigQuery\n90-day retention"]
-            svc_ar["Artifact Registry\nsrelab-docker repo"]
-            svc_sm["Secret Manager\n2 secrets (auto-replicated)"]
-            svc_ps["Pub/Sub\nsrelab-metrics-alerts topic"]
-        end
-    end
+            Deployment_Node(user_pool, "User Node Pool", "3x n2-standard-2, 100GB pd-standard") {
+                Container(app_pods, "Application Pods", "cloudops namespace", "store-front (2)<br/>store-admin (1)<br/>order-service (2)<br/>product-service (2)<br/>makeline-service (2)<br/>virtual-customer (1)")
+                Container(data_pods, "Data Pods", "cloudops namespace", "mongodb (1) + PVC 8Gi<br/>rabbitmq (1)")
+                Container(obs_pods, "Observability Pods", "cloudops namespace", "grafana (1)")
+            }
+        }
+
+        Deployment_Node(managed, "GCP Managed Services") {
+            Container(svc_mon, "Cloud Monitoring", "", "2 alert policies<br/>1 dashboard")
+            Container(svc_log, "Cloud Logging", "", "Log sink to BigQuery<br/>90-day retention")
+            Container(svc_ar, "Artifact Registry", "", "srelab-docker repo")
+            Container(svc_sm, "Secret Manager", "", "2 secrets (auto-replicated)")
+            Container(svc_ps, "Pub/Sub", "", "srelab-metrics-alerts topic")
+        }
+    }
 ```
 
 ## Network Topology
