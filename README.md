@@ -5,7 +5,7 @@ A Google Cloud Platform-native SRE training lab with breakable Kubernetes scenar
 ## Architecture
 
 - **GKE Cluster** with system + user node pools (VPC-native, Calico network policies)
-- **Store Demo App** (Vue.js frontend, Node.js/Rust/Go microservices, MongoDB, RabbitMQ)
+- **Store Demo App** (Vue.js frontend, Node.js/Rust/Go microservices, MongoDB, RabbitMQ) deployed to `cloudops` namespace
 - **10 Breakable Scenarios** for SRE training (OOM, CrashLoop, ImagePull, CPU, Pending, Probe, Network, Config, DB Down, Service Mismatch)
 - **Observability Stack**: Cloud Monitoring, Cloud Logging, BigQuery log sink, Grafana, Google Managed Prometheus
 - **Infrastructure as Code**: Terraform with 7 modular modules
@@ -22,19 +22,25 @@ A Google Cloud Platform-native SRE training lab with breakable Kubernetes scenar
 # 1. Set your project
 export GCP_PROJECT_ID=your-project-id
 
-# 2. Deploy everything
+# 2. See all available targets
+make help
+
+# 3. Deploy everything
 make deploy
 
-# 3. Validate
+# 4. Validate
 make validate
 
-# 4. Apply a failure scenario
+# 5. Apply a failure scenario
 make break-oom
 
-# 5. Restore healthy state
+# 6. Watch pods
+make watch-pods
+
+# 7. Restore healthy state
 make fix
 
-# 6. Tear down
+# 8. Tear down
 make destroy
 ```
 
@@ -70,18 +76,25 @@ gcp-sre-agent/
 | Component | Monthly |
 |-----------|---------|
 | GKE (control plane + 5 nodes) | ~$423 |
-| Managed services | ~$32 |
+| Managed services (BigQuery, NAT, Pub/Sub, AR, SM) | ~$27 |
 | Gemini API (optional) | ~$20 |
-| **Total** | **~$475/month** |
+| **Total (without Gemini)** | **~$450/month** |
+| **Total (with Gemini)** | **~$470/month** |
 
-Run `make estimate-costs` for a detailed breakdown.
+| Duration | Estimated Cost |
+|----------|---------------|
+| 1 hour demo | ~$1-2 |
+| 1 day | ~$16 |
+| 1 month (always-on) | ~$470 |
+
+Run `make estimate-costs` for a detailed breakdown. See [Cost Estimation](gcp-sre-agent/docs/COSTS.md) for optimization strategies.
 
 ## Documentation
 
 - [Breakable Scenarios Guide](gcp-sre-agent/docs/BREAKABLE-SCENARIOS.md)
 - [SRE Agent Prompts Library](gcp-sre-agent/docs/SRE-AGENT-PROMPTS.md)
 - [Gemini Setup Guide](gcp-sre-agent/docs/GEMINI-SETUP.md)
-- [C4 Architecture Diagrams](gcp-sre-agent/docs/C4-ARCHITECTURE.md)
+- [Architecture Diagrams](gcp-sre-agent/docs/C4-ARCHITECTURE.md)
 - [Cost Estimation](gcp-sre-agent/docs/COSTS.md)
 - [Changelog](CHANGELOG.md)
 

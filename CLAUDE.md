@@ -9,29 +9,35 @@ GCP SRE Agent Sandbox — a GCP-native SRE training lab with 10 breakable Kubern
 ## Common Commands
 
 ```bash
+# See all available targets
+make help
+
 # Deploy infrastructure and app (requires GCP_PROJECT_ID env var)
 export GCP_PROJECT_ID=your-project-id
-bash gcp-sre-agent/scripts/deploy.sh srelab us-central1
+make deploy
 
 # Validate deployment
-bash gcp-sre-agent/scripts/validate-deployment.sh
+make validate
 
 # Tear down everything
-bash gcp-sre-agent/scripts/destroy.sh srelab
+make destroy
 
 # Apply a breakable scenario
-kubectl apply -f gcp-sre-agent/k8s/scenarios/<scenario>.yaml
+make break-oom
 
 # Restore healthy state
-kubectl apply -f gcp-sre-agent/k8s/base/application.yaml
+make fix
 
-# Terraform operations (from gcp-sre-agent/infra/terraform/)
-terraform init
-terraform plan -var="gcp_project_id=$GCP_PROJECT_ID" -var="gcp_region=us-central1" -var="workload_name=srelab"
-terraform apply
+# Watch pod status
+make watch-pods
+
+# Terraform operations
+make tf-init
+make tf-plan
+make tf-apply
 
 # Cost estimation
-bash gcp-sre-agent/scripts/estimate-costs.sh
+make estimate-costs
 ```
 
 ## Architecture
@@ -52,3 +58,4 @@ The project lives under `gcp-sre-agent/`. Key layers:
 - Container images sourced from `ghcr.io/gcp-sre-agent/store-demo`
 - Workload Identity is used for GCP service authentication (no key files)
 - All app workloads deploy to the `cloudops` namespace
+- Estimated cost: ~$450-470/month always-on, ~$16/day for demo usage

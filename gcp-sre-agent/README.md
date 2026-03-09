@@ -5,7 +5,7 @@ A Google Cloud Platform-native SRE training lab with breakable Kubernetes scenar
 ## Architecture
 
 - **GKE Cluster** with system + user node pools (VPC-native, Calico network policies)
-- **Store Demo App** (Vue.js frontend, Node.js/Rust/Go microservices, MongoDB, RabbitMQ)
+- **Store Demo App** (Vue.js frontend, Node.js/Rust/Go microservices, MongoDB, RabbitMQ) deployed to `cloudops` namespace
 - **10 Breakable Scenarios** for SRE training (OOM, CrashLoop, ImagePull, CPU, Pending, Probe, Network, Config, DB Down, Service Mismatch)
 - **Observability Stack**: Cloud Monitoring, Cloud Logging, BigQuery log sink, Grafana, Google Managed Prometheus
 - **Infrastructure as Code**: Terraform with 7 modular modules
@@ -25,48 +25,54 @@ A Google Cloud Platform-native SRE training lab with breakable Kubernetes scenar
 export GCP_PROJECT_ID=your-project-id
 
 # 2. Deploy everything
-bash scripts/deploy.sh srelab us-central1
+make deploy
 
 # 3. Validate
-bash scripts/validate-deployment.sh
+make validate
 ```
 
 ### Break Things
 
 ```bash
 # Apply a failure scenario
-kubectl apply -f k8s/scenarios/oom-killed.yaml
+make break-oom
 
 # Watch pods crash
-kubectl get pods -n cloudops -w
+make watch-pods
 
 # Diagnose with Cloud Logging / Gemini
 # "Why is order-service restarting?"
 
 # Fix it
-kubectl apply -f k8s/base/application.yaml
+make fix
 ```
 
 ### Destroy
 
 ```bash
-bash scripts/destroy.sh srelab
+make destroy
+```
+
+### All Targets
+
+```bash
+make help
 ```
 
 ## Breakable Scenarios
 
-| Scenario | Command | What Breaks |
-|----------|---------|-------------|
-| OOMKilled | `break-oom` | Memory exhaustion crashes |
-| CrashLoop | `break-crash` | Application startup failure |
-| ImagePullBackOff | `break-image` | Invalid container image |
-| High CPU | `break-cpu` | Resource exhaustion |
-| Pending Pods | `break-pending` | Insufficient cluster resources |
-| Probe Failure | `break-probe` | Health check failure loop |
-| Network Block | `break-network` | NetworkPolicy blocks traffic |
-| Missing Config | `break-config` | Non-existent ConfigMap reference |
-| MongoDB Down | `break-db` | Cascading dependency failure |
-| Service Mismatch | `break-service` | Silent selector mismatch |
+| Scenario | Make Target | What Breaks |
+|----------|------------|-------------|
+| OOMKilled | `make break-oom` | Memory exhaustion crashes |
+| CrashLoop | `make break-crash` | Application startup failure |
+| ImagePullBackOff | `make break-image` | Invalid container image |
+| High CPU | `make break-cpu` | Resource exhaustion |
+| Pending Pods | `make break-pending` | Insufficient cluster resources |
+| Probe Failure | `make break-probe` | Health check failure loop |
+| Network Block | `make break-network` | NetworkPolicy blocks traffic |
+| Missing Config | `make break-config` | Non-existent ConfigMap reference |
+| MongoDB Down | `make break-db` | Cascading dependency failure |
+| Service Mismatch | `make break-service` | Silent selector mismatch |
 
 See [docs/BREAKABLE-SCENARIOS.md](docs/BREAKABLE-SCENARIOS.md) for detailed instructions.
 
@@ -96,16 +102,17 @@ gcp-sre-agent/
 | Component | Monthly |
 |-----------|---------|
 | GKE (control plane + 5 nodes) | ~$423 |
-| Managed services | ~$32 |
+| Managed services | ~$27 |
 | Gemini API (optional) | ~$20 |
-| **Total** | **~$475/month** |
+| **Total (without Gemini)** | **~$450/month** |
+| **Total (with Gemini)** | **~$470/month** |
 
-Run `bash scripts/estimate-costs.sh` for detailed breakdown.
+Run `make estimate-costs` for detailed breakdown. See [docs/COSTS.md](docs/COSTS.md) for optimization strategies.
 
 ## Documentation
 
 - [Breakable Scenarios Guide](docs/BREAKABLE-SCENARIOS.md)
 - [SRE Agent Prompts Library](docs/SRE-AGENT-PROMPTS.md)
 - [Gemini Setup Guide](docs/GEMINI-SETUP.md)
-- [C4 Architecture Diagrams](docs/C4-ARCHITECTURE.md)
+- [Architecture Diagrams](docs/C4-ARCHITECTURE.md)
 - [Cost Estimation](docs/COSTS.md)

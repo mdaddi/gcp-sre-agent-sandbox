@@ -11,7 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed application namespace from `pets` to `cloudops` across all manifests, scripts, Terraform, and documentation
 - Rebranded container images from `ghcr.io/azure-samples/aks-store-demo` to `ghcr.io/gcp-sre-agent/store-demo`
-- Converted C4 Mermaid diagrams to standard flowchart syntax for GitHub rendering compatibility
+- Converted Mermaid diagrams to standard `graph` syntax for GitHub rendering compatibility
+- Updated all READMEs to use `make` targets instead of raw script commands
+- Aligned cost estimates across README, inner README, and COSTS.md (~$450-470/month)
+
+### Added
+
+- Self-documenting `make help` target as default Makefile goal
+- Help descriptions (`## comment`) on all 22 Makefile targets
 
 ## [1.0.0] - 2026-03-09
 
@@ -31,4 +38,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Makefile with targets for all common operations
 - VS Code dev container configuration
 - SRE Agent prompts library and Gemini setup documentation
-- C4 architecture diagrams (context, container, component, deployment)
+- Architecture diagrams (system context, container, component, deployment)
