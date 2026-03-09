@@ -13,7 +13,7 @@ resource "google_service_account_iam_binding" "workload_identity_binding" {
   role               = "roles/iam.workloadIdentityUser"
 
   members = [
-    "serviceAccount:${var.workload_identity_pool_id}[pets/${each.key}]"
+    "serviceAccount:${var.workload_identity_pool_id}[cloudops/${each.key}]"
   ]
 }
 

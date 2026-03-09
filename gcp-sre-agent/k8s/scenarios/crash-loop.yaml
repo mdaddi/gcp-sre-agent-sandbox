@@ -11,7 +11,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: product-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: product-service
     scenario: crash-loop

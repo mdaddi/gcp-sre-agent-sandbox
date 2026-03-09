@@ -4,14 +4,14 @@
 # Pods request more resources than available, staying in Pending state.
 #
 # HOW TO BREAK: kubectl apply -f k8s/scenarios/pending-pods.yaml
-# HOW TO FIX:   kubectl delete deployment resource-hog -n pets
+# HOW TO FIX:   kubectl delete deployment resource-hog -n cloudops
 # =============================================================================
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: resource-hog
-  namespace: pets
+  namespace: cloudops
   labels:
     app: resource-hog
     scenario: pending-pods

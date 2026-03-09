@@ -29,8 +29,8 @@ A comprehensive collection of prompts for GCP SRE diagnosis using Gemini in Clou
 | Prompt | When to Use |
 |--------|-------------|
 | "Something is wrong with my application. Can you investigate?" | Great starting point |
-| "Which pods in the pets namespace are not in a Running state?" | Quick status check |
-| "Show me all warning and error events in the pets namespace from the last 30 minutes" | Event-level triage |
+| "Which pods in the cloudops namespace are not in a Running state?" | Quick status check |
+| "Show me all warning and error events in the cloudops namespace from the last 30 minutes" | Event-level triage |
 | "Are there any failed deployments or rollouts in progress?" | Catch stuck rollouts |
 
 ### Pod-Level Diagnosis
@@ -47,7 +47,7 @@ A comprehensive collection of prompts for GCP SRE diagnosis using Gemini in Clou
 | Prompt | When to Use |
 |--------|-------------|
 | "Can store-front reach order-service on port 3000?" | Service-to-service connectivity |
-| "Are there any network policies blocking traffic in the pets namespace?" | Restrictive policies |
+| "Are there any network policies blocking traffic in the cloudops namespace?" | Restrictive policies |
 | "Why does the order-service Service have zero endpoints?" | Selector/label mismatches |
 | "Show me DNS resolution results for mongodb inside the cluster" | Service discovery |
 
@@ -75,7 +75,7 @@ A comprehensive collection of prompts for GCP SRE diagnosis using Gemini in Clou
 
 | Prompt | When to Use |
 |--------|-------------|
-| "What's the current CPU and memory utilization for each pod in pets namespace?" | Real-time snapshot |
+| "What's the current CPU and memory utilization for each pod in cloudops namespace?" | Real-time snapshot |
 | "Are there any pods consistently running above 80% of their resource limits?" | About-to-break detection |
 | "Show me container restart counts and trends over the last 24 hours" | Stability trending |
 
@@ -124,9 +124,9 @@ A comprehensive collection of prompts for GCP SRE diagnosis using Gemini in Clou
 
 | Prompt | When to Use |
 |--------|-------------|
-| "Are any containers running as root in the pets namespace?" | Security posture |
+| "Are any containers running as root in the cloudops namespace?" | Security posture |
 | "Are there any containers running without resource limits set?" | Best practice enforcement |
-| "Show me the RBAC roles and bindings in the pets namespace" | Access control review |
+| "Show me the RBAC roles and bindings in the cloudops namespace" | Access control review |
 | "Are any of my container images using the 'latest' tag?" | Image tagging audit |
 | "Check if network policies exist for all services" | Network segmentation |
 
@@ -156,7 +156,7 @@ A comprehensive collection of prompts for GCP SRE diagnosis using Gemini in Clou
 
 | Prompt | When to Use |
 |--------|-------------|
-| "Map out the service dependencies in the pets namespace" | Topology discovery |
+| "Map out the service dependencies in the cloudops namespace" | Topology discovery |
 | "Is MongoDB healthy and accepting connections?" | Database check |
 | "Is RabbitMQ running and are queues being consumed?" | Message broker health |
 | "Which services depend on MongoDB and how would they be affected if it went down?" | Blast radius |
@@ -181,7 +181,7 @@ A comprehensive collection of prompts for GCP SRE diagnosis using Gemini in Clou
 | Prompt | Schedule | Purpose |
 |--------|----------|---------|
 | "Check GKE cluster health and alert if any node is NotReady" | Every 15 min | Node monitoring |
-| "Monitor pod restarts in pets namespace" | Every 15 min | Restart detection |
+| "Monitor pod restarts in cloudops namespace" | Every 15 min | Restart detection |
 | "Run a daily capacity report" | Daily at 8 AM | Capacity monitoring |
 | "Check for pods in CrashLoopBackOff or ImagePullBackOff" | Every 30 min | Failure detection |
 

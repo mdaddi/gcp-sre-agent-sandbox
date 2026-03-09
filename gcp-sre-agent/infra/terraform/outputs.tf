@@ -35,11 +35,11 @@ output "monitoring_dashboard_ids" {
 }
 
 output "grafana_endpoint_command" {
-  value       = "kubectl get svc -n pets grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
+  value       = "kubectl get svc -n cloudops grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
   description = "Command to get Grafana endpoint"
 }
 
 output "storefront_endpoint_command" {
-  value       = "kubectl get svc -n pets store-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
+  value       = "kubectl get svc -n cloudops store-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
   description = "Command to get Store Frontend endpoint"
 }

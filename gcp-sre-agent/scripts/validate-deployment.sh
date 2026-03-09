@@ -17,29 +17,29 @@ if [ $NODES -lt 2 ]; then
 fi
 echo "  [PASS] Found $NODES nodes"
 
-# Check pets namespace
-echo "Checking pets namespace..."
-kubectl get namespace pets > /dev/null || exit 1
+# Check cloudops namespace
+echo "Checking cloudops namespace..."
+kubectl get namespace cloudops > /dev/null || exit 1
 echo "  [PASS] Namespace exists"
 
 # Check all pods running
 echo "Checking pods..."
-PENDING=$(kubectl get pods -n pets --field-selector=status.phase=Pending --no-headers 2>/dev/null | wc -l)
+PENDING=$(kubectl get pods -n cloudops --field-selector=status.phase=Pending --no-headers 2>/dev/null | wc -l)
 if [ $PENDING -gt 0 ]; then
   echo "  [FAIL] Found $PENDING pending pods"
-  kubectl get pods -n pets --field-selector=status.phase=Pending
+  kubectl get pods -n cloudops --field-selector=status.phase=Pending
   exit 1
 fi
 echo "  [PASS] No pending pods"
 
 # Check services
 echo "Checking services..."
-kubectl get svc -n pets | grep -E 'store-front|store-admin' > /dev/null || exit 1
+kubectl get svc -n cloudops | grep -E 'store-front|store-admin' > /dev/null || exit 1
 echo "  [PASS] Services deployed"
 
 # Check LoadBalancer IPs
 echo "Checking LoadBalancer endpoints..."
-STORE_FRONT_IP=$(kubectl get svc store-front -n pets -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo "")
+STORE_FRONT_IP=$(kubectl get svc store-front -n cloudops -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null || echo "")
 if [ -z "$STORE_FRONT_IP" ]; then
   echo "  [INFO] Store front IP not yet assigned (this can take a few minutes)"
 else

@@ -12,7 +12,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb
-  namespace: pets
+  namespace: cloudops
   labels:
     app: mongodb
     scenario: mongodb-down

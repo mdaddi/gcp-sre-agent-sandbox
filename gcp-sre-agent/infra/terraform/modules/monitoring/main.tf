@@ -45,7 +45,7 @@ resource "google_monitoring_alert_policy" "pod_restart" {
     display_name = "Pod restarts > 5 in 5 minutes"
 
     condition_threshold {
-      filter          = "metric.type=\"kubernetes.io/pod/container/restart_count\" resource.type=\"k8s_pod\" resource.labels.namespace_name=\"pets\""
+      filter          = "metric.type=\"kubernetes.io/pod/container/restart_count\" resource.type=\"k8s_pod\" resource.labels.namespace_name=\"cloudops\""
       duration        = "300s"
       comparison      = "COMPARISON_GT"
       threshold_value = 5
@@ -68,7 +68,7 @@ resource "google_monitoring_alert_policy" "crashloop" {
     display_name = "Pod in CrashLoopBackOff"
 
     condition_threshold {
-      filter          = "resource.type=\"k8s_pod\" resource.labels.namespace_name=\"pets\" metric.type=\"kubernetes.io/pod/phase\" AND metric.labels.phase=\"Failed\""
+      filter          = "resource.type=\"k8s_pod\" resource.labels.namespace_name=\"cloudops\" metric.type=\"kubernetes.io/pod/phase\" AND metric.labels.phase=\"Failed\""
       duration        = "60s"
       comparison      = "COMPARISON_GT"
       threshold_value = 0

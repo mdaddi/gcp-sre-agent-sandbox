@@ -21,7 +21,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: pets
+  name: cloudops
   labels:
     app.kubernetes.io/part-of: store-demo
     sre-agent-demo: "true"
@@ -34,7 +34,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: rabbitmq
-  namespace: pets
+  namespace: cloudops
   labels:
     app: rabbitmq
 spec:
@@ -89,7 +89,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rabbitmq
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     app: rabbitmq
@@ -109,7 +109,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: mongodb-data-pvc
-  namespace: pets
+  namespace: cloudops
   labels:
     app: mongodb
 spec:
@@ -128,7 +128,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongodb
-  namespace: pets
+  namespace: cloudops
   labels:
     app: mongodb
 spec:
@@ -168,7 +168,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: mongodb
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     app: mongodb
@@ -184,7 +184,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: product-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: product-service
 spec:
@@ -232,7 +232,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: product-service
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     app: product-service
@@ -248,7 +248,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: order-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: order-service
 spec:
@@ -306,7 +306,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: order-service
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     app: order-service
@@ -322,7 +322,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: makeline-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: makeline-service
 spec:
@@ -382,7 +382,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: makeline-service
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     app: makeline-service
@@ -398,7 +398,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: store-front
-  namespace: pets
+  namespace: cloudops
   labels:
     app: store-front
 spec:
@@ -448,7 +448,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: store-front
-  namespace: pets
+  namespace: cloudops
 spec:
   type: LoadBalancer
   selector:
@@ -465,7 +465,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: store-admin
-  namespace: pets
+  namespace: cloudops
   labels:
     app: store-admin
 spec:
@@ -515,7 +515,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: store-admin
-  namespace: pets
+  namespace: cloudops
 spec:
   type: LoadBalancer
   selector:
@@ -532,7 +532,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-customer
-  namespace: pets
+  namespace: cloudops
   labels:
     app: virtual-customer
 spec:
@@ -571,7 +571,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: virtual-worker
-  namespace: pets
+  namespace: cloudops
   labels:
     app: virtual-worker
 spec:

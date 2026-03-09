@@ -4,14 +4,14 @@
 # NetworkPolicy blocks all traffic to order-service.
 #
 # HOW TO BREAK: kubectl apply -f k8s/scenarios/network-block.yaml
-# HOW TO FIX:   kubectl delete networkpolicy deny-order-service -n pets
+# HOW TO FIX:   kubectl delete networkpolicy deny-order-service -n cloudops
 # =============================================================================
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: deny-order-service
-  namespace: pets
+  namespace: cloudops
   labels:
     scenario: network-block
     sre-demo: breakable

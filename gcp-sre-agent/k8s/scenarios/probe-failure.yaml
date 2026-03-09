@@ -4,14 +4,14 @@
 # Service with a liveness probe that always fails, causing continuous restarts.
 #
 # HOW TO BREAK: kubectl apply -f k8s/scenarios/probe-failure.yaml
-# HOW TO FIX:   kubectl delete deployment unhealthy-service -n pets
+# HOW TO FIX:   kubectl delete deployment unhealthy-service -n cloudops
 # =============================================================================
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: unhealthy-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: unhealthy-service
     scenario: probe-failure

@@ -10,12 +10,12 @@ GCP provides AI-powered infrastructure diagnostics through **Gemini in Cloud Log
 
 ```bash
 # Query Cloud Logging from CLI
-gcloud logging read "resource.type=k8s_pod AND resource.labels.namespace_name=pets" \
+gcloud logging read "resource.type=k8s_pod AND resource.labels.namespace_name=cloudops" \
   --limit=50 \
   --format=json
 
 # Query for specific errors
-gcloud logging read "resource.type=k8s_container AND severity>=ERROR AND resource.labels.namespace_name=pets" \
+gcloud logging read "resource.type=k8s_container AND severity>=ERROR AND resource.labels.namespace_name=cloudops" \
   --limit=20 \
   --format=json
 
@@ -27,7 +27,7 @@ gcloud logging read "resource.type=k8s_pod AND jsonPayload.reason=BackOff" \
 
 ### Cloud Console Steps
 1. Go to **Logging > Logs Explorer**
-2. Filter by `resource.type="k8s_container"` and `resource.labels.namespace_name="pets"`
+2. Filter by `resource.type="k8s_container"` and `resource.labels.namespace_name="cloudops"`
 3. Click **Analyze with Gemini** (if available in your region)
 
 ## Approach 2: Gemini Code Assist
@@ -38,12 +38,12 @@ Use GitHub Copilot or VS Code Gemini extension to analyze logs interactively.
 
 ```bash
 # Get pod logs
-kubectl logs -n pets -l app=order-service --tail=50
+kubectl logs -n cloudops -l app=order-service --tail=50
 
 # Copy logs and ask Gemini: "Why is this pod crashing?"
 
 # Get pod events
-kubectl describe pod -l app=order-service -n pets
+kubectl describe pod -l app=order-service -n cloudops
 
 # Ask Gemini: "Analyze these Kubernetes events and identify the root cause"
 ```
@@ -78,21 +78,21 @@ Alert triggered in Cloud Monitoring
 ### Find OOMKilled Pods
 ```
 resource.type="k8s_container"
-resource.labels.namespace_name="pets"
+resource.labels.namespace_name="cloudops"
 jsonPayload.reason="OOMKilled"
 ```
 
 ### Find CrashLoopBackOff
 ```
 resource.type="k8s_pod"
-resource.labels.namespace_name="pets"
+resource.labels.namespace_name="cloudops"
 jsonPayload.reason="BackOff"
 ```
 
 ### Find ImagePullBackOff
 ```
 resource.type="k8s_pod"
-resource.labels.namespace_name="pets"
+resource.labels.namespace_name="cloudops"
 jsonPayload.reason="Failed"
 jsonPayload.message=~".*pull.*"
 ```

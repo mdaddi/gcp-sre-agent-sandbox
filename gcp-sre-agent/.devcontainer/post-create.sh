@@ -39,7 +39,7 @@ alias kgn='kubectl get nodes'
 alias kdp='kubectl describe pod'
 alias klogs='kubectl logs'
 alias kexec='kubectl exec -it'
-alias kwatch='kubectl get pods -n pets -w'
+alias kwatch='kubectl get pods -n cloudops -w'
 
 # Terraform aliases
 alias tf='terraform'
@@ -68,7 +68,7 @@ alias break-db='kubectl apply -f k8s/scenarios/mongodb-down.yaml'
 alias break-service='kubectl apply -f k8s/scenarios/service-mismatch.yaml'
 
 # Fix everything
-alias fix-all='kubectl apply -f k8s/base/application.yaml && kubectl delete deployment cpu-stress-test unhealthy-service resource-hog misconfigured-service -n pets 2>/dev/null; kubectl delete networkpolicy deny-order-service -n pets 2>/dev/null; echo "All scenarios fixed!"'
+alias fix-all='kubectl apply -f k8s/base/application.yaml && kubectl delete deployment cpu-stress-test unhealthy-service resource-hog misconfigured-service -n cloudops 2>/dev/null; kubectl delete networkpolicy deny-order-service -n cloudops 2>/dev/null; echo "All scenarios fixed!"'
 
 # Help
 sre-help() {

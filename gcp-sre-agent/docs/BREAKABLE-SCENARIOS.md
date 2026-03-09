@@ -37,14 +37,14 @@ kubectl apply -f k8s/scenarios/oom-killed.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets -w
-kubectl describe pod -l app=order-service -n pets | grep -A 5 "Last State"
+kubectl get pods -n cloudops -w
+kubectl describe pod -l app=order-service -n cloudops | grep -A 5 "Last State"
 ```
 
 **Diagnosis prompts:**
 - "Why is the order-service pod restarting repeatedly?"
 - "I see OOMKilled events. What memory should I allocate?"
-- "Diagnose the memory issues in the pets namespace"
+- "Diagnose the memory issues in the cloudops namespace"
 
 **How to fix:**
 ```bash
@@ -69,8 +69,8 @@ kubectl apply -f k8s/scenarios/crash-loop.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets | grep product-service
-kubectl logs -l app=product-service -n pets --previous
+kubectl get pods -n cloudops | grep product-service
+kubectl logs -l app=product-service -n cloudops --previous
 ```
 
 **Diagnosis prompts:**
@@ -101,8 +101,8 @@ kubectl apply -f k8s/scenarios/image-pull-backoff.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets | grep makeline
-kubectl describe pod -l app=makeline-service -n pets | grep -A 10 Events
+kubectl get pods -n cloudops | grep makeline
+kubectl describe pod -l app=makeline-service -n cloudops | grep -A 10 Events
 ```
 
 **Diagnosis prompts:**
@@ -128,7 +128,7 @@ kubectl apply -f k8s/scenarios/high-cpu.yaml
 
 **What to observe:**
 ```bash
-kubectl top pods -n pets
+kubectl top pods -n cloudops
 kubectl top nodes
 ```
 
@@ -138,7 +138,7 @@ kubectl top nodes
 
 **How to fix:**
 ```bash
-kubectl delete deployment cpu-stress-test -n pets
+kubectl delete deployment cpu-stress-test -n cloudops
 ```
 
 ---
@@ -154,8 +154,8 @@ kubectl apply -f k8s/scenarios/pending-pods.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets | grep resource-hog
-kubectl describe pod -l app=resource-hog -n pets | grep -A 10 Events
+kubectl get pods -n cloudops | grep resource-hog
+kubectl describe pod -l app=resource-hog -n cloudops | grep -A 10 Events
 ```
 
 **Diagnosis prompts:**
@@ -164,7 +164,7 @@ kubectl describe pod -l app=resource-hog -n pets | grep -A 10 Events
 
 **How to fix:**
 ```bash
-kubectl delete deployment resource-hog -n pets
+kubectl delete deployment resource-hog -n cloudops
 ```
 
 ---
@@ -180,8 +180,8 @@ kubectl apply -f k8s/scenarios/probe-failure.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets -l app=unhealthy-service -w
-kubectl describe pod -l app=unhealthy-service -n pets | grep -A 5 "Liveness"
+kubectl get pods -n cloudops -l app=unhealthy-service -w
+kubectl describe pod -l app=unhealthy-service -n cloudops | grep -A 5 "Liveness"
 ```
 
 **Diagnosis prompts:**
@@ -190,7 +190,7 @@ kubectl describe pod -l app=unhealthy-service -n pets | grep -A 5 "Liveness"
 
 **How to fix:**
 ```bash
-kubectl delete deployment unhealthy-service -n pets
+kubectl delete deployment unhealthy-service -n cloudops
 ```
 
 ---
@@ -206,7 +206,7 @@ kubectl apply -f k8s/scenarios/network-block.yaml
 
 **What to observe:**
 ```bash
-kubectl exec -n pets deploy/store-front -- curl -s order-service:3000/health
+kubectl exec -n cloudops deploy/store-front -- curl -s order-service:3000/health
 # Should timeout or fail
 ```
 
@@ -216,7 +216,7 @@ kubectl exec -n pets deploy/store-front -- curl -s order-service:3000/health
 
 **How to fix:**
 ```bash
-kubectl delete networkpolicy deny-order-service -n pets
+kubectl delete networkpolicy deny-order-service -n cloudops
 ```
 
 ---
@@ -232,8 +232,8 @@ kubectl apply -f k8s/scenarios/missing-config.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets | grep misconfigured
-kubectl describe pod -l app=misconfigured-service -n pets | grep -A 10 Events
+kubectl get pods -n cloudops | grep misconfigured
+kubectl describe pod -l app=misconfigured-service -n cloudops | grep -A 10 Events
 ```
 
 **Diagnosis prompts:**
@@ -242,7 +242,7 @@ kubectl describe pod -l app=misconfigured-service -n pets | grep -A 10 Events
 
 **How to fix:**
 ```bash
-kubectl delete deployment misconfigured-service -n pets
+kubectl delete deployment misconfigured-service -n cloudops
 ```
 
 ---
@@ -264,9 +264,9 @@ kubectl apply -f k8s/scenarios/mongodb-down.yaml
 
 **What to observe:**
 ```bash
-kubectl get deployment mongodb -n pets
-kubectl get pods -n pets -l app=makeline-service
-kubectl exec -n pets deploy/rabbitmq -- rabbitmqctl list_queues
+kubectl get deployment mongodb -n cloudops
+kubectl get pods -n cloudops -l app=makeline-service
+kubectl exec -n cloudops deploy/rabbitmq -- rabbitmqctl list_queues
 ```
 
 **Diagnosis prompts:**
@@ -296,9 +296,9 @@ kubectl apply -f k8s/scenarios/service-mismatch.yaml
 
 **What to observe:**
 ```bash
-kubectl get pods -n pets -l app=order-service        # Healthy!
-kubectl get endpoints order-service -n pets           # Empty!
-kubectl get svc order-service -n pets -o jsonpath='{.spec.selector}'
+kubectl get pods -n cloudops -l app=order-service        # Healthy!
+kubectl get endpoints order-service -n cloudops           # Empty!
+kubectl get svc order-service -n cloudops -o jsonpath='{.spec.selector}'
 ```
 
 **Diagnosis prompts:**

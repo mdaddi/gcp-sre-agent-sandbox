@@ -4,14 +4,14 @@
 # Service references a non-existent ConfigMap, preventing pod startup.
 #
 # HOW TO BREAK: kubectl apply -f k8s/scenarios/missing-config.yaml
-# HOW TO FIX:   kubectl delete deployment misconfigured-service -n pets
+# HOW TO FIX:   kubectl delete deployment misconfigured-service -n cloudops
 # =============================================================================
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: misconfigured-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: misconfigured-service
     scenario: missing-config

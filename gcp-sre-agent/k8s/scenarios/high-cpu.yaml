@@ -4,14 +4,14 @@
 # Stress test pods consume excessive CPU, affecting other workloads.
 #
 # HOW TO BREAK: kubectl apply -f k8s/scenarios/high-cpu.yaml
-# HOW TO FIX:   kubectl delete deployment cpu-stress-test -n pets
+# HOW TO FIX:   kubectl delete deployment cpu-stress-test -n cloudops
 # =============================================================================
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cpu-stress-test
-  namespace: pets
+  namespace: cloudops
   labels:
     app: cpu-stress-test
     scenario: high-cpu

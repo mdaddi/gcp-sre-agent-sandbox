@@ -66,7 +66,7 @@ check_kubectl() {
 check_kubernetes_resources() {
   echo -e "${BLUE}Checking Kubernetes resources...${NC}"
 
-  kubectl get pods -n pets 2>/dev/null || echo -e "${YELLOW}  No pets namespace found${NC}"
+  kubectl get pods -n cloudops 2>/dev/null || echo -e "${YELLOW}  No cloudops namespace found${NC}"
 }
 
 # Main menu

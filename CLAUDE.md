@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GCP SRE Agent Sandbox — a GCP-native SRE training lab with 10 breakable Kubernetes scenarios on GKE. Uses a Store Demo App (Vue.js frontend, Node.js/Rust/Go microservices, MongoDB, RabbitMQ) deployed to the `pets` namespace.
+GCP SRE Agent Sandbox — a GCP-native SRE training lab with 10 breakable Kubernetes scenarios on GKE. Uses a Store Demo App (Vue.js frontend, Node.js/Rust/Go microservices, MongoDB, RabbitMQ) deployed to the `cloudops` namespace.
 
 ## Common Commands
 
@@ -51,4 +51,4 @@ The project lives under `gcp-sre-agent/`. Key layers:
 - Node pools: 2x `n2-standard-2` (system), 3x `n2-standard-2` (user)
 - Container images sourced from `ghcr.io/gcp-sre-agent/store-demo`
 - Workload Identity is used for GCP service authentication (no key files)
-- All app workloads deploy to the `pets` namespace
+- All app workloads deploy to the `cloudops` namespace

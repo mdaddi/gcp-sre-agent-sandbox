@@ -31,7 +31,7 @@ flowchart TB
 
         subgraph gke ["GKE Cluster (srelab-gke)"]
 
-            subgraph pets_ns ["Namespace: pets"]
+            subgraph cloudops_ns ["Namespace: cloudops"]
                 storefront["store-front\nVue.js\n:8080"]
                 storeadmin["store-admin\nVue.js\n:8081"]
                 orderservice["order-service\nNode.js\n:3000"]
@@ -128,9 +128,9 @@ flowchart TB
             end
 
             subgraph user_pool ["User Node Pool\n3x n2-standard-2, 100GB pd-standard"]
-                app_pods["Application Pods (pets ns)\nstore-front (2), store-admin (1)\norder-service (2), product-service (2)\nmakeline-service (2), virtual-customer (1)"]
-                data_pods["Data Pods (pets ns)\nmongodb (1) + PVC 8Gi\nrabbitmq (1)"]
-                obs_pods["Observability Pods (pets ns)\ngrafana (1)"]
+                app_pods["Application Pods (cloudops ns)\nstore-front (2), store-admin (1)\norder-service (2), product-service (2)\nmakeline-service (2), virtual-customer (1)"]
+                data_pods["Data Pods (cloudops ns)\nmongodb (1) + PVC 8Gi\nrabbitmq (1)"]
+                obs_pods["Observability Pods (cloudops ns)\ngrafana (1)"]
             end
         end
 

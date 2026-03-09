@@ -44,7 +44,7 @@ gcloud iam service-accounts create sre-agent \
 # Bind Workload Identity
 gcloud iam service-accounts add-iam-policy-binding $KSA_EMAIL \
   --role roles/iam.workloadIdentityUser \
-  --member "serviceAccount:$PROJECT_ID.svc.id.goog[pets/sre-agent]" \
+  --member "serviceAccount:$PROJECT_ID.svc.id.goog[cloudops/sre-agent]" \
   --project=$PROJECT_ID \
   --quiet --no-user-output-enabled || true
 

@@ -38,7 +38,7 @@ bash scripts/validate-deployment.sh
 kubectl apply -f k8s/scenarios/oom-killed.yaml
 
 # Watch pods crash
-kubectl get pods -n pets -w
+kubectl get pods -n cloudops -w
 
 # Diagnose with Cloud Logging / Gemini
 # "Why is order-service restarting?"

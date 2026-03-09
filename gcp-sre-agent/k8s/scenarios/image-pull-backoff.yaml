@@ -11,7 +11,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: makeline-service
-  namespace: pets
+  namespace: cloudops
   labels:
     app: makeline-service
     scenario: image-pull-backoff

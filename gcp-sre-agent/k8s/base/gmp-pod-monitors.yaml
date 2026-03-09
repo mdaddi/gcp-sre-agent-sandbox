@@ -6,7 +6,7 @@ apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
   name: order-service
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     matchLabels:
@@ -21,7 +21,7 @@ apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
   name: product-service
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     matchLabels:
@@ -36,7 +36,7 @@ apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
   name: makeline-service
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     matchLabels:
@@ -51,7 +51,7 @@ apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
   name: store-front
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     matchLabels:
@@ -66,7 +66,7 @@ apiVersion: monitoring.googleapis.com/v1
 kind: PodMonitoring
 metadata:
   name: store-admin
-  namespace: pets
+  namespace: cloudops
 spec:
   selector:
     matchLabels:

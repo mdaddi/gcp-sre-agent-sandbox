@@ -84,4 +84,4 @@ fix:
 ## Monitoring
 
 watch-pods:
-	kubectl get pods -n pets -w
+	kubectl get pods -n cloudops -w

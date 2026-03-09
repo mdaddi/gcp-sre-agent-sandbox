@@ -100,7 +100,7 @@ bash scripts/configure-iam.sh
 
 # Deploy application
 echo -e "${YELLOW}Deploying application...${NC}"
-kubectl create namespace pets --dry-run=client -o yaml | kubectl apply -f -
+kubectl create namespace cloudops --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -f k8s/base/application.yaml
 kubectl apply -f k8s/base/gmp-pod-monitors.yaml
 kubectl apply -f k8s/base/grafana.yaml
@@ -108,11 +108,11 @@ kubectl apply -f k8s/base/grafana.yaml
 # Wait for LoadBalancer IPs
 echo -e "${YELLOW}Waiting for service endpoints...${NC}"
 sleep 30
-kubectl get svc -n pets
+kubectl get svc -n cloudops
 
 # Validation
 bash scripts/validate-deployment.sh
 
 echo -e "${GREEN}Deployment complete!${NC}"
-echo -e "${GREEN}Grafana: kubectl get svc -n pets grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}'${NC}"
-echo -e "${GREEN}Store Front: kubectl get svc -n pets store-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}'${NC}"
+echo -e "${GREEN}Grafana: kubectl get svc -n cloudops grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}'${NC}"
+echo -e "${GREEN}Store Front: kubectl get svc -n cloudops store-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}'${NC}"
