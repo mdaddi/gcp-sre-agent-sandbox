@@ -49,6 +49,6 @@ The project lives under `gcp-sre-agent/`. Key layers:
 - Terraform requires `>= 1.0`, Google provider `~> 5.0`, Kubernetes provider `~> 2.23`
 - GKE runs Kubernetes 1.32 with VPC-native networking and Calico network policies
 - Node pools: 2x `n2-standard-2` (system), 3x `n2-standard-2` (user)
-- Container images sourced from `ghcr.io/azure-samples/aks-store-demo`
+- Container images sourced from `ghcr.io/gcp-sre-agent/store-demo`
 - Workload Identity is used for GCP service authentication (no key files)
 - All app workloads deploy to the `pets` namespace

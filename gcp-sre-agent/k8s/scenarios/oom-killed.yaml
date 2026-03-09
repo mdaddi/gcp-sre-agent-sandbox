@@ -32,7 +32,7 @@ spec:
         nodepool-type: user
       containers:
         - name: order-service
-          image: ghcr.io/azure-samples/aks-store-demo/order-service:latest
+          image: ghcr.io/gcp-sre-agent/store-demo/order-service:latest
           ports:
             - containerPort: 3000
           resources:
